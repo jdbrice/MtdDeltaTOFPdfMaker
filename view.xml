@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<ExportConfig url="pdf_inline.xml" />
+	<Data name="d" url="deltaTOF_pdfs.root" inline="true" />
+
+
+	<Transform>
+		<Rebin save_as="sbg" name="d/bg" bins_x="dtofsmooth" />
+		<Rebin save_as="ssig" name="d/sig" bins_x="dtofsmooth" />
+	</Transform>
+
+	<dtofsmooth min="-50" max="50" width="0.05" />
+
+	<Plot>
+		<Histo name="ssig" draw="H" logy="1" xr="-10, 10" yr="1e-6, 1" linecolor="#0000FF" optstat="0" xtitle="#Delta Time of Flight (ns)" ytitle="dN/d(#Delta Time of Flight (ns)^{-1})">
+			<Norm/>
+		</Histo>
+		<Histo name="sbg" draw="H same" linecolor="#FF0000"  >
+			<Norm/>
+		</Histo>
+		<!-- <TF1 name="dan" formula="gaus" p0="0.12024" p1="0" p2="1.4e-1" draw="same" min="-1" max="1" linecolor="#000000" /> -->
+
+		<Legend>
+			<Position pos="top right" w="0.35" h="0.2" />
+			<Entry name="ssig" title="J/#Psi muons" />
+			<Entry name="sbg" title="background" />
+			<!-- <Entry name="dan" title="gaussian fit" /> -->
+		</Legend>
+
+		<Export url="pdf.pdf" />
+	</Plot>
+
+
+
+	<Plot>
+		<Histo name="d/mass_sig_uls" xtitle="M_{#mu#mu} (GeV/c^{2}" ytitle="dN/dM (GeV/c^{2})^{-1}" logy="0" />
+		<Histo name="d/mass_sig_roi_uls" draw="same" fillcolor="#FF0000, 0.5"/>
+		<Export url="signal_mass_uls.pdf" />
+	</Plot>
+
+	<Plot>
+		<Histo name="d/mass_sig_uls" xtitle="M_{#mu#mu} (GeV/c^{2}" ytitle="dN/dM (GeV/c^{2})^{-1}" logy="1" />
+		<Histo name="d/mass_sig_roi_uls" draw="same" fillcolor="#FF0000, 0.5"/>
+		<Export url="signal_mass_uls_semilog.pdf" />
+	</Plot>
+
+	<Plot>
+		<Histo name="d/mass_bg_uls" xtitle="M_{#mu#mu} (GeV/c^{2}" ytitle="dN/dM (GeV/c^{2})^{-1}" logy="1" />
+		<Export url="bg_mass_uls.pdf" />
+	</Plot>
+
+</config>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<Logger url="log.log" />
+
+	<Data url="inv_mass_mumu_jpsi.root" treeName="FemtoDst" name="d" />
+	<TFile url="deltaTOF_pdfs.root" />
+
+	<jpsi s="{jpsi:pid} && {jpsi:roi}" pid="Pairs.mChargeSum==0 && abs( Pairs.d1_mDeltaZ ) < 10 && abs( Pairs.d1_mDeltaY ) < 10 && abs( Pairs.d2_mDeltaZ ) < 10 && abs( Pairs.d2_mDeltaY ) < 10 && Pairs.d1_mDCA<0.5 && Pairs.d2_mDCA<0.5 && Pairs.d1_mCell!=0 && Pairs.d1_mCell!=11 && Pairs.d2_mCell!=0 && Pairs.d2_mCell!=11 && Pairs.d1_mNSigmaPion>-1 && Pairs.d2_mNSigmaPion>-1" roi="Pairs.mMass>3 && Pairs.mMass<3.2" />
+	<bg pid1="Pairs.d1_mNSigmaPion < 1 && Pairs.d1_mDCA>1 && ( abs(Pairs.d1_mDeltaY)>10 || abs(Pairs.d1_mDeltaZ)>10  )" pid2="Pairs.d2_mNSigmaPion < 1 && Pairs.d2_mDCA>1 && ( abs(Pairs.d2_mDeltaY)>10 || abs(Pairs.d2_mDeltaZ)>10  )" />
+
+
+	<Transform>
+		<Draw data="d" name="mass_uls" draw="Pairs.mMass" select="Pairs.mChargeSum==0" bins_x="mass" />
+		<Draw data="d" name="mass_sig_uls" draw="Pairs.mMass" select="{jpsi:pid}" bins_x="mass" />
+		<Draw data="d" name="mass_sig_roi_uls" draw="Pairs.mMass" select="{jpsi:s}" bins_x="mass" />
+
+		<Draw data="d" name="mass_bg_uls" draw="Pairs.mMass" select="Pairs.mChargeSum==0 && {bg:pid1} && {bg:pid2}" bins_x="mass" />
+		
+		<Draw data="d" name="sig_dtof1" draw="Pairs.d1_mDeltaTOF" select="{jpsi:s}" bins_x="dtof" />
+		<Draw data="d" name="sig_dtof2" draw="Pairs.d2_mDeltaTOF" select="{jpsi:s}" bins_x="dtof" />
+
+		<Draw data="d" name="all_dtof1" draw="Pairs.d1_mDeltaTOF" select="" bins_x="dtof" />
+		<Draw data="d" name="all_dtof2" draw="Pairs.d2_mDeltaTOF" select="" bins_x="dtof" />
+
+		<Draw data="d" name="bg_dtof1" draw="Pairs.d1_mDeltaTOF" select="{bg:pid1}" bins_x="dtof" />
+		<Draw data="d" name="bg_dtof2" draw="Pairs.d2_mDeltaTOF" select="{bg:pid2}" bins_x="dtof" />
+	</Transform>
+
+	<Transform>
+		<Add save_as="all" nameA="all_dtof1" nameB="all_dtof2" />
+		<Add save_as="sig" nameA="sig_dtof1" nameB="sig_dtof2" />
+		<Add save_as="bg" nameA="bg_dtof1" nameB="bg_dtof2" />
+
+		<Style name="all" linecolor="#000000" />
+		<Style name="sig" linecolor="#0000FF" />
+		<Style name="bg" linecolor="#FF0000" />
+
+	</Transform>
+
+	<dtof min="-50" max="50" width="0.01" />
+	<mass min="0" max="5" width="0.01" />
+
+</config>
